@@ -6,7 +6,11 @@
 - Omar Vicente Pérez Arista
 - Marcela Alejandra Álvarez Terrazas
 
-Detalles:
+Tema: Implicaciones del COVID-19 en el sector tecnológico en México
+
+App: https://edgonz.shinyapps.io/proyecto_bedu/
+
+Documentación:
 
 Limpieza_data.R -> Código para la extracción y limpieza de los datos de INEGI y la Secretaria de salud.
 
