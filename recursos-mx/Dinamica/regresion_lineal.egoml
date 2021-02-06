@@ -1,0 +1,303 @@
+<?xml version="1.0" standalone="yes" ?>
+<script>
+    <property key="dff.date" value="2018-Jan-27 19:07:01" />
+    <property key="dff.version" value="4.0.3.20170831" />
+    <property key="metadata.author" value="JF Mas" />
+    <property key="metadata.organization" value="CIGA UNAM" />
+    <functor name="LoadMap">
+        <property key="dff.functor.alias" value="loadMap2604" />
+        <property key="dff.functor.comment" value="Banda 1" />
+        <inputport name="filename">&quot;../recursos-mx/LC08_L1TP_028047_20170411_20170415_01_T1_B2.TIF&quot;</inputport>
+        <inputport name="nullValue">.none</inputport>
+        <inputport name="loadAsSparse">.no</inputport>
+        <inputport name="suffixDigits">0</inputport>
+        <inputport name="step">.none</inputport>
+        <inputport name="workdir">.none</inputport>
+        <outputport name="map" id="v1" />
+    </functor>
+    <functor name="IntegerValue">
+        <property key="dff.functor.alias" value="integerValue2799" />
+        <property key="dff.functor.comment" value="Números de puntos" />
+        <inputport name="constant">100</inputport>
+        <outputport name="object" id="v2" />
+    </functor>
+    <functor name="LoadMap">
+        <property key="dff.functor.alias" value="loadMap2604" />
+        <property key="dff.functor.comment" value="Banda 2" />
+        <inputport name="filename">&quot;../recursos-mx/LC08_L1TP_028047_20170411_20170415_01_T1_B3.TIF&quot;</inputport>
+        <inputport name="nullValue">.none</inputport>
+        <inputport name="loadAsSparse">.no</inputport>
+        <inputport name="suffixDigits">0</inputport>
+        <inputport name="step">.none</inputport>
+        <inputport name="workdir">.none</inputport>
+        <outputport name="map" id="v3" />
+    </functor>
+    <functor name="ExtractMapAttributes">
+        <property key="dff.functor.alias" value="extractMapAttributes2845" />
+        <property key="viewer.attributes" value="yes" />
+        <property key="viewer.layerattributes" value="yes" />
+        <inputport name="map" peerid="v3" />
+        <inputport name="extractDynamicAttributes">.yes</inputport>
+        <inputport name="extractStatisticalAttributes">.yes</inputport>
+        <outputport name="attributes" id="v4" />
+    </functor>
+    <functor name="Table">
+        <property key="dff.functor.alias" value="table2563" />
+        <property key="viewer.object" value="yes" />
+        <inputport name="constant" peerid="v6" />
+        <outputport name="object" id="v5" />
+    </functor>
+    <functor name="ExtractStructTable">
+        <property key="dff.functor.alias" value="extractStructTable2564" />
+        <inputport name="struct" peerid="v11" />
+        <inputport name="name">&quot;tabxy&quot;</inputport>
+        <outputport name="table" id="v6" />
+    </functor>
+    <functor name="LookupTable">
+        <property key="dff.functor.alias" value="lookupTable2578" />
+        <property key="dff.functor.comment" value="Banda 2" />
+        <property key="viewer.object" value="yes" />
+        <inputport name="constant" peerid="v21" />
+        <outputport name="object" id="v7" />
+    </functor>
+    <functor name="LookupTable">
+        <property key="dff.functor.alias" value="lookupTable2578" />
+        <property key="dff.functor.comment" value="banda 1" />
+        <inputport name="constant" peerid="v20" />
+        <outputport name="object" id="v8" />
+    </functor>
+    <functor name="ExtractStructNumber">
+        <property key="dff.functor.alias" value="extractStructNumber30293" />
+        <property key="dff.functor.comment" value="a" />
+        <property key="submodel.out.number.description" value="Alpha coefficient." />
+        <property key="submodel.out.number.name" value="alpha" />
+        <property key="submodel.out.number.order" value="1" />
+        <property key="viewer.number" value="yes" />
+        <inputport name="struct" peerid="v24" />
+        <inputport name="name">&quot;a&quot;</inputport>
+        <outputport name="number" id="v9" />
+    </functor>
+    <functor name="ExtractStructNumber">
+        <property key="dff.functor.alias" value="extractStructNumber30294" />
+        <property key="dff.functor.comment" value="b" />
+        <property key="submodel.out.number.description" value="Beta coefficient." />
+        <property key="submodel.out.number.name" value="beta" />
+        <property key="submodel.out.number.order" value="2" />
+        <property key="viewer.number" value="yes" />
+        <inputport name="struct" peerid="v24" />
+        <inputport name="name">&quot;b&quot;</inputport>
+        <outputport name="number" id="v10" />
+    </functor>
+    <functor name="SaveMap">
+        <property key="dff.functor.alias" value="saveMap2595" />
+        <inputport name="map" peerid="v25" />
+        <inputport name="filename">&quot;residuales.tif&quot;</inputport>
+        <inputport name="suffixDigits">2</inputport>
+        <inputport name="step">.none</inputport>
+        <inputport name="useCompression">.yes</inputport>
+        <inputport name="workdir">.none</inputport>
+    </functor>
+    <containerfunctor name="CalculateRExpression">
+        <property key="dff.container.collapsed" value="no" />
+        <property key="dff.functor.alias" value="calculateRExpression2606" />
+        <property key="dff.functor.comment" value="Genera tabla de x y de los puntos de muestreo" />
+        <property key="viewer.result" value="yes" />
+        <inputport name="expression">&quot;# Recibe datos de DINAMICA&#x0A;numptos &lt;- v1&#x0A;numlin &lt;- v2&#x0A;numcol &lt;- v3&#x0A;&#x0A;# Genera coordenadas aleatorios&#x0A;y &lt;- floor(runif(numptos, min=1, max=numlin))&#x0A;x &lt;- floor(runif(numptos, min=1, max=numcol))&#x0A;tab &lt;- cbind(seq(1:numptos),x,y)&#x0A;&#x0A;# Pasa la tabla a Dinamica&#x0A;outputTable(\&quot;tabxy\&quot;, tab)&#x0A;&quot;</inputport>
+        <inputport name="treatWarningAsErrors">.no</inputport>
+        <outputport name="result" id="v11" />
+        <functor name="NumberValue">
+            <property key="dff.functor.alias" value="numberValue2800" />
+            <inputport name="value" peerid="v2" />
+            <inputport name="valueNumber">1</inputport>
+        </functor>
+        <functor name="NumberValue">
+            <property key="dff.functor.alias" value="numberValue2800" />
+            <inputport name="value" peerid="v13" />
+            <inputport name="valueNumber">3</inputport>
+        </functor>
+        <functor name="NumberValue">
+            <property key="dff.functor.alias" value="numberValue2800" />
+            <inputport name="value" peerid="v12" />
+            <inputport name="valueNumber">2</inputport>
+        </functor>
+    </containerfunctor>
+    <containerfunctor name="CalculateValue">
+        <property key="dff.container.collapsed" value="no" />
+        <property key="dff.functor.alias" value="calculateValue2846" />
+        <property key="dff.functor.comment" value="Calcula núm de líneas" />
+        <property key="viewer.result" value="yes" />
+        <inputport name="expression">[&#x0A;    t1[1]&#x0A;]</inputport>
+        <inputport name="defaultValue">.none</inputport>
+        <outputport name="result" id="v12" />
+        <functor name="NumberTable">
+            <property key="dff.functor.alias" value="numberTable2848" />
+            <inputport name="table" peerid="v4" />
+            <inputport name="tableNumber">1</inputport>
+        </functor>
+    </containerfunctor>
+    <containerfunctor name="CalculateValue">
+        <property key="dff.container.collapsed" value="no" />
+        <property key="dff.functor.alias" value="calculateValue2846" />
+        <property key="dff.functor.comment" value="Calcula núm de columnas" />
+        <property key="viewer.result" value="yes" />
+        <inputport name="expression">[&#x0A;    t1[2]&#x0A;]</inputport>
+        <inputport name="defaultValue">.none</inputport>
+        <outputport name="result" id="v13" />
+        <functor name="NumberTable">
+            <property key="dff.functor.alias" value="numberTable2848" />
+            <inputport name="table" peerid="v4" />
+            <inputport name="tableNumber">1</inputport>
+        </functor>
+    </containerfunctor>
+    <containerfunctor name="Repeat">
+        <property key="dff.container.collapsed" value="no" />
+        <property key="dff.functor.alias" value="repeat2580" />
+        <inputport name="iterations" peerid="v2" />
+        <internaloutputport name="step" id="v14" />
+        <functor name="Step">
+            <property key="dff.functor.alias" value="step2575" />
+            <property key="viewer.step" value="yes" />
+            <inputport name="step" peerid="v14" />
+            <outputport name="step" id="v15" />
+        </functor>
+        <functor name="GetMapValue">
+            <property key="dff.functor.alias" value="getMapValue2855" />
+            <property key="viewer.cellvalue" value="yes" />
+            <inputport name="map" peerid="v3" />
+            <inputport name="cellLine" peerid="v23" />
+            <inputport name="cellColumn" peerid="v22" />
+            <inputport name="valueIfNull">0</inputport>
+            <outputport name="cellValue" id="v16" />
+        </functor>
+        <functor name="SetLookupTableValue">
+            <property key="dff.functor.alias" value="setLookupTableValue2576" />
+            <inputport name="table" peerid="v21" />
+            <inputport name="key" peerid="v15" />
+            <inputport name="value" peerid="v16" />
+            <outputport name="updatedTable" id="v17" />
+        </functor>
+        <functor name="GetMapValue">
+            <property key="dff.functor.alias" value="getMapValue2855" />
+            <property key="viewer.cellvalue" value="yes" />
+            <inputport name="map" peerid="v1" />
+            <inputport name="cellLine" peerid="v23" />
+            <inputport name="cellColumn" peerid="v22" />
+            <inputport name="valueIfNull">0</inputport>
+            <outputport name="cellValue" id="v18" />
+        </functor>
+        <functor name="SetLookupTableValue">
+            <property key="dff.functor.alias" value="setLookupTableValue2576" />
+            <inputport name="table" peerid="v20" />
+            <inputport name="key" peerid="v15" />
+            <inputport name="value" peerid="v18" />
+            <outputport name="updatedTable" id="v19" />
+        </functor>
+        <functor name="MuxLookupTable">
+            <property key="dff.functor.alias" value="muxLookupTable2577" />
+            <property key="viewer.table" value="yes" />
+            <inputport name="initial">[&#x0A;    &quot;Key&quot; &quot;Value&quot;&#x0A;]</inputport>
+            <inputport name="feedback" peerid="v19" />
+            <outputport name="table" id="v20" />
+        </functor>
+        <functor name="MuxLookupTable">
+            <property key="dff.functor.alias" value="muxLookupTable2577" />
+            <inputport name="initial">[&#x0A;    &quot;Key&quot; &quot;Value&quot;&#x0A;]</inputport>
+            <inputport name="feedback" peerid="v17" />
+            <outputport name="table" id="v21" />
+        </functor>
+        <containerfunctor name="CalculateValue">
+            <property key="dff.container.collapsed" value="no" />
+            <property key="dff.functor.alias" value="calculateValue2565" />
+            <property key="dff.functor.comment" value="x" />
+            <property key="viewer.result" value="yes" />
+            <inputport name="expression">[&#x0A;    t1[[v1][&quot;x&quot;]]&#x0A;]</inputport>
+            <inputport name="defaultValue">.none</inputport>
+            <outputport name="result" id="v22" />
+            <functor name="NumberValue">
+                <property key="dff.functor.alias" value="numberValue2566" />
+                <inputport name="value" peerid="v15" />
+                <inputport name="valueNumber">1</inputport>
+            </functor>
+            <functor name="NumberTable">
+                <property key="dff.functor.alias" value="numberTable2567" />
+                <inputport name="table" peerid="v5" />
+                <inputport name="tableNumber">1</inputport>
+            </functor>
+        </containerfunctor>
+        <containerfunctor name="CalculateValue">
+            <property key="dff.container.collapsed" value="no" />
+            <property key="dff.functor.alias" value="calculateValue2565" />
+            <property key="dff.functor.comment" value="y" />
+            <property key="viewer.result" value="yes" />
+            <inputport name="expression">[&#x0A;    t1[[v1][&quot;y&quot;]]&#x0A;]</inputport>
+            <inputport name="defaultValue">.none</inputport>
+            <outputport name="result" id="v23" />
+            <functor name="NumberValue">
+                <property key="dff.functor.alias" value="numberValue2566" />
+                <inputport name="value" peerid="v15" />
+                <inputport name="valueNumber">1</inputport>
+            </functor>
+            <functor name="NumberTable">
+                <property key="dff.functor.alias" value="numberTable2567" />
+                <inputport name="table" peerid="v5" />
+                <inputport name="tableNumber">1</inputport>
+            </functor>
+        </containerfunctor>
+    </containerfunctor>
+    <containerfunctor name="Group">
+        <property key="dff.functor.alias" value="group2584" />
+        <containerfunctor name="CalculateRExpression">
+            <property key="dff.container.collapsed" value="no" />
+            <property key="dff.functor.alias" value="calculateRExpression2606" />
+            <property key="viewer.result" value="yes" />
+            <inputport name="expression">&quot;# Importa las dos tablas de Dinamica&#x0A;tabla1 &lt;- t1&#x0A;tabla2 &lt;- t2&#x0A;colnames(tabla1) &lt;- colnames(tabla2) &lt;- c(\&quot;key\&quot;, \&quot;ND\&quot;)&#x0A;# Extrae la columna con los valores espectrales&#x0A;x &lt;- tabla1$ND&#x0A;y &lt;- tabla2$ND&#x0A;# crea un dataframe&#x0A;tab &lt;- data.frame(cbind(x,y))&#x0A;&#x0A;# Eabora diagrama de dispersion&#x0A;png(\&quot;diag_dispersion.png\&quot;)&#x0A;plot(x,y,main=\&quot;Diagrama de dispersión banda 2 versus 1\&quot;, xlab=\&quot;banda 1\&quot;, ylab=\&quot;banda 2\&quot;)&#x0A;dev.off()&#x0A;&#x0A;# Ajusta mdelo lineal&#x0A;regression &lt;- lm(formula=y~x, data=tab)&#x0A;print(regression)&#x0A;coefficents &lt;- coef(regression)&#x0A;# y = a x + b&#x0A;&#x0A;# Exporta a Dinamica los coeficientes de la ecuación&#x0A;outputDouble(\&quot;b\&quot;, coefficents[1])&#x0A;outputDouble(\&quot;a\&quot;, coefficents[2])&#x0A;&quot;</inputport>
+            <inputport name="treatWarningAsErrors">.no</inputport>
+            <outputport name="result" id="v24" />
+            <functor name="NumberTable">
+                <property key="dff.functor.alias" value="numberTable2607" />
+                <property key="dff.functor.comment" value="banda 1" />
+                <inputport name="table" peerid="v8" />
+                <inputport name="tableNumber">1</inputport>
+            </functor>
+            <functor name="NumberTable">
+                <property key="dff.functor.alias" value="numberTable2598" />
+                <property key="dff.functor.comment" value="banda 2" />
+                <inputport name="table" peerid="v7" />
+                <inputport name="tableNumber">2</inputport>
+            </functor>
+        </containerfunctor>
+    </containerfunctor>
+    <containerfunctor name="CalculateMap">
+        <property key="dff.container.collapsed" value="no" />
+        <property key="dff.functor.alias" value="calculateMap2590" />
+        <property key="dff.functor.comment" value="Residuales" />
+        <inputport name="expression">[&#x0A;    i2 - (v1 * i1 + v2)&#x0A;]</inputport>
+        <inputport name="cellType">.float32</inputport>
+        <inputport name="nullValue">.default</inputport>
+        <inputport name="resultIsSparse">.no</inputport>
+        <inputport name="resultFormat">.none</inputport>
+        <outputport name="result" id="v25" />
+        <functor name="NumberMap">
+            <property key="dff.functor.alias" value="numberMap2591" />
+            <inputport name="map" peerid="v1" />
+            <inputport name="mapNumber">1</inputport>
+        </functor>
+        <functor name="NumberMap">
+            <property key="dff.functor.alias" value="numberMap2592" />
+            <inputport name="map" peerid="v3" />
+            <inputport name="mapNumber">2</inputport>
+        </functor>
+        <functor name="NumberValue">
+            <property key="dff.functor.alias" value="numberValue2593" />
+            <property key="dff.functor.comment" value="a" />
+            <inputport name="value" peerid="v9" />
+            <inputport name="valueNumber">1</inputport>
+        </functor>
+        <functor name="NumberValue">
+            <property key="dff.functor.alias" value="numberValue2594" />
+            <property key="dff.functor.comment" value="b" />
+            <inputport name="value" peerid="v10" />
+            <inputport name="valueNumber">2</inputport>
+        </functor>
+    </containerfunctor>
+</script>
