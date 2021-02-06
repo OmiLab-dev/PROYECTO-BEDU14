@@ -1,0 +1,40 @@
+<?xml version="1.0" standalone="yes" ?>
+<script>
+    <property key="dff.date" value="2018-Jan-27 19:06:07" />
+    <property key="dff.version" value="4.0.3.20170831" />
+    <property key="metadata.author" value="JF Mas" />
+    <property key="metadata.organization" value="CIGA UNAM" />
+    <functor name="LoadMap">
+        <property key="dff.functor.alias" value="loadMap2604" />
+        <property key="dff.functor.comment" value="Carga una imagen" />
+        <inputport name="filename">&quot;../recursos-mx/LC08_L1TP_028047_20170411_20170415_01_T1_B2.TIF&quot;</inputport>
+        <inputport name="nullValue">.none</inputport>
+        <inputport name="loadAsSparse">.no</inputport>
+        <inputport name="suffixDigits">0</inputport>
+        <inputport name="step">.none</inputport>
+        <inputport name="workdir">.none</inputport>
+        <outputport name="map" id="v1" />
+    </functor>
+    <functor name="CalcHistogram">
+        <property key="dff.functor.alias" value="calcHistogram2605" />
+        <property key="dff.functor.comment" value="Crea tabla de frecuencia" />
+        <property key="viewer.histogram" value="yes" />
+        <inputport name="map" peerid="v1" />
+        <inputport name="intervalWidth">100</inputport>
+        <inputport name="cumulative">.no</inputport>
+        <inputport name="relative">.no</inputport>
+        <outputport name="histogram" id="v2" />
+    </functor>
+    <containerfunctor name="CalculateRExpression">
+        <property key="dff.container.collapsed" value="no" />
+        <property key="dff.functor.alias" value="calculateRExpression2606" />
+        <property key="viewer.result" value="yes" />
+        <inputport name="expression">&quot;tabla &lt;- t1&#x0A;colnames(tabla) &lt;- c(\&quot;valores\&quot;, \&quot;n\&quot;)&#x0A;png(\&quot;histograma.png\&quot;)&#x0A;plot(tabla$n,tabla$valores,main=\&quot;Histograma banda 2\&quot;, xlab=\&quot;\&quot;, ylab=\&quot;Número de celdas\&quot;)&#x0A;dev.off()&quot;</inputport>
+        <inputport name="treatWarningAsErrors">.no</inputport>
+        <functor name="NumberTable">
+            <property key="dff.functor.alias" value="numberTable2607" />
+            <inputport name="table" peerid="v2" />
+            <inputport name="tableNumber">1</inputport>
+        </functor>
+    </containerfunctor>
+</script>
